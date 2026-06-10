@@ -1,14 +1,39 @@
-version: '3.8'
-
 services:
+  db:
+    image: postgres:17-alpine
+    container_name: fastapi_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: fastapi_starter
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fastapi_starter"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   web:
     build:
-      context: ..                   # Đi lùi ra thư mục gốc (fastapi_starter) để làm gốc build
-      dockerfile: docker/Dockerfile  # Chỉ đường dẫn cụ thể tới file Dockerfile này
+      context: ..
+      dockerfile: docker/Dockerfile
     container_name: fastapi_web_app
     ports:
       - "8000:8000"
     volumes:
-      - ..:/app                     # Đồng bộ toàn bộ thư mục gốc vào /app trong container để hot-reload
+      - ..:/app
     environment:
-      - ENV=development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_SERVER: db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: fastapi_starter
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
