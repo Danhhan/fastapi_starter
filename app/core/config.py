@@ -20,12 +20,14 @@ class PostgresSettings(BaseSettings):
     POSTGRES_SERVER: str = "localhost"
     POSTGRES_PORT: int = 5432
     POSTGRES_DB: str = "postgres"
+    POSTGRES_ASYNC_PREFIX: str = "postgresql+asyncpg://"
     POSTGRES_URL: str | None = None
 
     @computed_field  # type: ignore[prop-decorator]
     @property
     def POSTGRES_URI(self) -> str:
-        credentials = f"{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+        password = quote(self.POSTGRES_PASSWORD, safe="")
+        credentials = f"{self.POSTGRES_USER}:{password}"
         location = f"{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         return f"{credentials}@{location}"
 

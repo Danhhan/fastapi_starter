@@ -1,3 +1,9 @@
 fastapi[standard]
 pydantic-settings>=2.0,<3.0
 sqlalchemy>=2.0,<3.0
+asyncpg>=0.29,<1.0
+alembic>=1.13.1
+uuid>=1.30
+uuid6>=2024.1.12
+ruff==0.14.10
+bcrypt>=4.1.1

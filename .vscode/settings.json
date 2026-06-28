@@ -1,0 +1,25 @@
+{
+    "cSpell.words": [
+        "barcodes",
+        "dtos",
+        "joinedload",
+        "jsonable",
+        "LAZADA",
+        "oasin",
+        "oasins",
+        "onflow",
+        "syncable"
+    ],
+
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "python-envs.pythonProjects": [
+        {
+            "path": "",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        }
+    ],
+    "editor.semanticHighlighting.enabled": true
+}

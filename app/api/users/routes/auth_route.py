@@ -11,3 +11,12 @@ async def login():
             "name": "Danh"
         }
     ]
+
+@auth_router.get("/register")
+async def register():
+    return [
+        {
+            "id": 1,
+            "name": "Danh"
+        }
+    ]

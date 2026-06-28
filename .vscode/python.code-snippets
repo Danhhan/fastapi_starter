@@ -1,0 +1,55 @@
+{
+    "Import Logger at Top": {
+        "prefix": "!log",
+        "body": [
+            "import logging",
+            "",
+            "logger = logging.getLogger(__name__)",
+            "",
+            "$0",
+        ],
+        "description": "Import logger - use ONLY at top of file",
+    },
+
+    "Logger Info f-string": {
+        "prefix": "logi",
+        "body": ["logger.info(f\"$1\")"],
+        "description": "logger.info with f-string",
+    },
+
+    "Logger Info with variable": {
+        "prefix": "logv",
+        "body": ["logger.info(f\"${1:message}: {${2:var}}\")"],
+        "description": "logger.info with variable",
+    },
+
+    "Logger Multi-field": {
+        "prefix": "logm",
+        "body": [
+            "logger.info(",
+            "    f\"${1:action} - \"",
+            "    f\"${2:field1}: {${3:var1}}, \"",
+            "    f\"${4:field2}: {${5:var2}}\"",
+            ")",
+        ],
+        "description": "logger.info with multiple fields",
+    },
+
+    "Logger Debug": {
+        "prefix": "logd",
+        "body": ["logger.debug(f\"$1\")"],
+        "description": "logger.debug",
+    },
+
+    "Logger Error": {
+        "prefix": "loge",
+        "body": ["logger.error(f\"$1\")"],
+        "description": "logger.error",
+    },
+
+    "Logger Exception": {
+        "prefix": "logex",
+        "body": ["logger.exception(f\"$1\")"],
+        "description": "logger.exception for try/except",
+    },
+}

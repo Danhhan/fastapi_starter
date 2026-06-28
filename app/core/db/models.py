@@ -1,11 +1,15 @@
 import uuid as uuid_pkg
-from datetime import UTC, datetime
+from datetime import datetime
+import time
 
-from sqlalchemy import Boolean, DateTime, text
+from sqlalchemy import Boolean, DateTime, text, Column, Integer
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, declared_attr
 from uuid6 import uuid7
 
+
+class Base(DeclarativeBase):
+    pass
 
 class UUIDMixin:
     uuid: Mapped[uuid_pkg.UUID] = mapped_column(
@@ -14,25 +18,19 @@ class UUIDMixin:
 
 
 class TimestampMixin:
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        default=lambda: datetime.now(UTC),
-        server_default=text("current_timestamp"),
-    )
-    updated_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True),
-        nullable=True,
-        default=None,
-        onupdate=lambda: datetime.now(UTC),
-    )
+    @declared_attr
+    def created_at(cls):
+        return Column(Integer, default=lambda: int(time.time()))
+
+    @declared_attr
+    def updated_at(cls):
+        return Column(
+            Integer, default=lambda: int(time.time()), onupdate=lambda: int(time.time())
+        )
 
 
 class SoftDeleteMixin:
-    deleted_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True),
-        nullable=True,
-        default=None,
-    )
+    deleted_at: Mapped[int | None] = mapped_column(Integer, nullable=True)
     is_deleted: Mapped[bool] = mapped_column(
         Boolean,
         default=False,

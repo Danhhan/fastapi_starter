@@ -1,13 +1,17 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 from app.api import router as api_router
 from app.core.config import settings
 from app.core.db import async_engine
+from app.core.exceptions.base import CustomException
+from app.core.exceptions.handlers import register_exception_handlers
 
 
+# pyrefly: ignore [deprecated]
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     yield
@@ -16,6 +20,11 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 def init_routers(app_: FastAPI) -> None:
     app_.include_router(api_router)
+
+
+def init_listeners(app_: FastAPI) -> None:
+    # Exception handler
+    register_exception_handlers(app_)
 
 
 def create_app() -> FastAPI:
@@ -30,7 +39,7 @@ def create_app() -> FastAPI:
         # middleware=make_middleware(),
     )
     init_routers(app_=app_)
-    # init_listeners(app_=app_)
+    init_listeners(app_=app_)
     # init_cache()
     return app_
 
